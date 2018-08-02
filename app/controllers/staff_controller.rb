@@ -1,5 +1,9 @@
 class StaffController < ApplicationController
     def index
-        @groups = Group.staff.by_priority
+        @staff = Group.staff
+                      .flat_map(&:members)
+                      .uniq
+                      .map{|member| [member, member.primary_group]}
+                      .shuffle
     end
 end
